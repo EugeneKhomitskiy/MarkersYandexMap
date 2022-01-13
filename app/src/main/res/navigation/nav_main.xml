@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/mapFragment">
+
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.example.markersyandexmap.ui.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" >
+        <action
+            android:id="@+id/action_mapFragment_to_placesFragment"
+            app:destination="@id/listPlacesFragment" />
+        <action
+            android:id="@+id/action_mapFragment_to_newPlaceFragment"
+            app:destination="@id/newPlaceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/listPlacesFragment"
+        android:name="com.example.markersyandexmap.ui.PlacesFragment"
+        android:label="fragment_list_places"
+        tools:layout="@layout/fragment_places" >
+        <action
+            android:id="@+id/action_placesFragment_to_newPlaceFragment"
+            app:destination="@id/newPlaceFragment" />
+        <action
+            android:id="@+id/action_placesFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newPlaceFragment"
+        android:name="com.example.markersyandexmap.ui.NewPlaceFragment"
+        android:label="fragment_new_place"
+        tools:layout="@layout/fragment_new_place" >
+        <action
+            android:id="@+id/action_newPlaceFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+    </fragment>
+</navigation>

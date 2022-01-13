@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Markers</string>
+    <string name="my_places">My places</string>
+    <string name="menu_remove">Remove</string>
+    <string name="menu_edit">Edit</string>
+    <string name="menu_open">Show on the map</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="permission_deny">You do not have access to your location</string>
+</resources>
