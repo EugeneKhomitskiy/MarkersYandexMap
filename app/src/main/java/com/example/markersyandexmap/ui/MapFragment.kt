@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -73,7 +74,11 @@ class MapFragment : Fragment(), LocationListener, InputListener {
         mapView.map.addInputListener(this)
 
         view.findViewById<View>(R.id.user_location).setOnClickListener {
-            moveCamera(userLocationLayer.cameraPosition()?.target!!)
+            try {
+                moveCamera(userLocationLayer.cameraPosition()?.target!!)
+            } catch (e: Exception) {
+                Toast.makeText(context, "Повторите попытку", Toast.LENGTH_SHORT).show()
+            }
         }
 
         placeViewModel.data.observe(viewLifecycleOwner) {
@@ -104,7 +109,7 @@ class MapFragment : Fragment(), LocationListener, InputListener {
 
     private fun addMarker(point: Point) {
         val marker = View(context).apply {
-            background = context.getDrawable(R.drawable.ic_baseline_place_24)
+            background = AppCompatResources.getDrawable(context, R.drawable.ic_baseline_place_24)
         }
         mapView.map.mapObjects.addPlacemark(
             point,
