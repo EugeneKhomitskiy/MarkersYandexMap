@@ -168,6 +168,7 @@ class MapFragment : Fragment(), LocationListener, InputListener {
             putDouble("latitude", point.latitude)
             putDouble("longitude", point.longitude)
         }
+        placeViewModel.edit(Place.empty)
         findNavController().navigate(R.id.action_mapFragment_to_newPlaceFragment, bundle)
     }
 
