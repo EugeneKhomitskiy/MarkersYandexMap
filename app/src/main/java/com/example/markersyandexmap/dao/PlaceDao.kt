@@ -3,6 +3,7 @@ package com.example.markersyandexmap.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import com.example.markersyandexmap.dto.Place
 import com.example.markersyandexmap.entity.PlaceEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -10,6 +11,9 @@ import kotlinx.coroutines.flow.Flow
 interface PlaceDao {
     @Query("SELECT * FROM PlaceEntity ORDER BY title")
     fun getAll(): Flow<List<PlaceEntity>>
+
+    @Query("SELECT * FROM PlaceEntity WHERE latitude = :latitude AND longitude = :longitude")
+    suspend fun getPlace(latitude: Double, longitude: Double): Place
 
     @Insert
     suspend fun insert(place: PlaceEntity)

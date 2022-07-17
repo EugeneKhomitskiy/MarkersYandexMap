@@ -23,6 +23,7 @@ class PlaceViewModel @Inject constructor(
 
     val data: LiveData<List<Place>> = repository.data.asLiveData(Dispatchers.Default)
     val edited = MutableLiveData(empty)
+    val place = MutableLiveData<Place>()
 
     fun save(latitude: Double, longitude: Double) = viewModelScope.launch {
         edited.value?.let {
@@ -62,5 +63,9 @@ class PlaceViewModel @Inject constructor(
 
     fun removeById(id: Int) = viewModelScope.launch {
         repository.removeById(id)
+    }
+
+    fun getPlace(latitude: Double, longitude: Double) = viewModelScope.launch {
+        place.value = repository.getPlace(latitude, longitude)
     }
 }

@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_mapFragment_to_newPlaceFragment"
             app:destination="@id/newPlaceFragment" />
+        <action
+            android:id="@+id/action_mapFragment_to_singlePlaceFragment"
+            app:destination="@id/singlePlaceFragment" />
     </fragment>
     <fragment
         android:id="@+id/listPlacesFragment"
@@ -38,4 +41,9 @@
             android:id="@+id/action_newPlaceFragment_to_mapFragment"
             app:destination="@id/mapFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/singlePlaceFragment"
+        android:name="com.example.markersyandexmap.ui.SinglePlaceFragment"
+        android:label="fragment_single_place"
+        tools:layout="@layout/fragment_single_place" />
 </navigation>

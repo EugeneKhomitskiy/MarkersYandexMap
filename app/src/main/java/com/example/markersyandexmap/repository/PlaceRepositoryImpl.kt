@@ -26,4 +26,8 @@ class PlaceRepositoryImpl @Inject constructor(
             PlaceEntity.fromDto(place)
         )
     }
+
+    override suspend fun getPlace(latitude: Double, longitude: Double): Place {
+        return placeDao.getPlace(latitude, longitude)
+    }
 }

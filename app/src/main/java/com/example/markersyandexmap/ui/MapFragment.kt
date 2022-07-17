@@ -12,7 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.markersyandexmap.R
 import com.example.markersyandexmap.databinding.FragmentMapBinding
@@ -21,10 +21,7 @@ import com.example.markersyandexmap.viewmodel.PlaceViewModel
 import com.google.android.gms.location.LocationServices
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
-import com.yandex.mapkit.location.Location
-import com.yandex.mapkit.location.LocationListener
 import com.yandex.mapkit.location.LocationManager
-import com.yandex.mapkit.location.LocationStatus
 import com.yandex.mapkit.map.*
 import com.yandex.mapkit.map.Map
 import com.yandex.mapkit.mapview.MapView
@@ -35,7 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MapFragment : Fragment(), InputListener {
 
-    private val placeViewModel: PlaceViewModel by viewModels()
+    private val placeViewModel: PlaceViewModel by activityViewModels()
 
     private lateinit var mapView: MapView
     private lateinit var userLocationLayer: UserLocationLayer
@@ -44,6 +41,7 @@ class MapFragment : Fragment(), InputListener {
 
     private var position: Point? = null
     private var zoom = 16f
+    private val listener = listener()
 
     @SuppressLint("MissingPermission")
     private val requestPermissionLauncher =
@@ -123,10 +121,20 @@ class MapFragment : Fragment(), InputListener {
             arguments?.getDouble("lng") ?: 37.61556
         )
 
+        marksObject.addTapListener(listener)
         checkPermission()
         moveCamera(position!!)
 
         return binding.root
+    }
+
+    private fun listener(): MapObjectTapListener {
+        return MapObjectTapListener { mapObject, _ ->
+            mapObject as PlacemarkMapObject
+            placeViewModel.getPlace(mapObject.geometry.latitude, mapObject.geometry.longitude)
+            findNavController().navigate(R.id.action_mapFragment_to_singlePlaceFragment)
+            true
+        }
     }
 
     private fun moveCamera(point: Point) {
