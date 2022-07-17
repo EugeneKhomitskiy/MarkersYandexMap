@@ -8,3 +8,4 @@
 2. Редактирование точки
 3. Удаление точки
 4. Просмотр всех точек (на отдельном экране - пользователь кликает в существующую точку и переходит к ней на карте)
+![Image alt](https://github.com/EugeneKhomitskiy/MarkersYandexMap/blob/master/screenshot.jpg)
