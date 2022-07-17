@@ -1,22 +1,27 @@
 package com.example.markersyandexmap.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import com.example.markersyandexmap.dao.PlaceDao
 import com.example.markersyandexmap.dto.Place
 import com.example.markersyandexmap.entity.PlaceEntity
+import com.example.markersyandexmap.entity.toDto
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class PlaceRepositoryImpl(private val placeDao: PlaceDao): PlaceRepository {
+class PlaceRepositoryImpl @Inject constructor(
+    private val placeDao: PlaceDao
+): PlaceRepository {
 
-    override fun getAll(): LiveData<List<Place>> = Transformations.map(placeDao.getAll()) { list ->
-        list.map { it.toDto() }
-    }
+    override val data = placeDao.getAll()
+        .map(List<PlaceEntity>::toDto)
+        .flowOn(Dispatchers.Default)
 
-    override fun removeById(id: Int) {
+    override suspend fun removeById(id: Int) {
         placeDao.removeById(id)
     }
 
-    override fun save(place: Place) {
+    override suspend fun save(place: Place) {
         placeDao.save(
             PlaceEntity.fromDto(place)
         )

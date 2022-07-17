@@ -33,3 +33,5 @@ data class PlaceEntity(
             )
     }
 }
+
+fun List<PlaceEntity>.toDto() = map(PlaceEntity::toDto)

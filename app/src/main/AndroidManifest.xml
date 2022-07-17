@@ -15,8 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MarkersYandexMap"
-        android:name=".application.MarkersApplication"
-        android:usesCleartextTraffic="${usesCleartextTraffic}">
+        android:name=".application.MarkersApplication">
         <activity
             android:name=".ui.MainActivity"
             android:exported="true">

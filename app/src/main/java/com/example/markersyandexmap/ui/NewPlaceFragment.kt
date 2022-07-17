@@ -8,12 +8,12 @@ import androidx.navigation.fragment.findNavController
 import com.example.markersyandexmap.R
 import com.example.markersyandexmap.databinding.FragmentNewPlaceBinding
 import com.example.markersyandexmap.viewmodel.PlaceViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class NewPlaceFragment: Fragment() {
 
-    private val placeViewModel: PlaceViewModel by viewModels(
-        ownerProducer = ::requireParentFragment
-    )
+    private val placeViewModel: PlaceViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

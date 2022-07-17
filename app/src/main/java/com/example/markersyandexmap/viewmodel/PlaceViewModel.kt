@@ -1,12 +1,12 @@
 package com.example.markersyandexmap.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import com.example.markersyandexmap.db.AppDb
+import androidx.lifecycle.*
 import com.example.markersyandexmap.dto.Place
 import com.example.markersyandexmap.repository.PlaceRepository
-import com.example.markersyandexmap.repository.PlaceRepositoryImpl
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 private val empty = Place(
     id = 0,
@@ -16,14 +16,15 @@ private val empty = Place(
     longitude = 0.0
 )
 
-class PlaceViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class PlaceViewModel @Inject constructor(
+    private val repository: PlaceRepository
+): ViewModel() {
 
-    private val repository: PlaceRepository = PlaceRepositoryImpl(AppDb.getInstance(context = application).placeDao)
-
-    val data = repository.getAll()
+    val data: LiveData<List<Place>> = repository.data.asLiveData(Dispatchers.Default)
     val edited = MutableLiveData(empty)
 
-    fun save(latitude: Double, longitude: Double) {
+    fun save(latitude: Double, longitude: Double) = viewModelScope.launch {
         edited.value?.let {
             repository.save(it.copy(
                 latitude = latitude,
@@ -59,7 +60,7 @@ class PlaceViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun removeById(id: Int) {
+    fun removeById(id: Int) = viewModelScope.launch {
         repository.removeById(id)
     }
 }

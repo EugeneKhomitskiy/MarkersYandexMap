@@ -1,10 +1,10 @@
 package com.example.markersyandexmap.repository
 
-import androidx.lifecycle.LiveData
 import com.example.markersyandexmap.dto.Place
+import kotlinx.coroutines.flow.Flow
 
 interface PlaceRepository {
-    fun getAll(): LiveData<List<Place>>
-    fun removeById(id: Int)
-    fun save(place: Place)
+    val data: Flow<List<Place>>
+    suspend fun removeById(id: Int)
+    suspend fun save(place: Place)
 }

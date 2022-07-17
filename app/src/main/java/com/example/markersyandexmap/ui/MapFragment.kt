@@ -29,12 +29,12 @@ import com.yandex.mapkit.map.Map
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.mapkit.user_location.UserLocationLayer
 import com.yandex.runtime.ui_view.ViewProvider
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MapFragment : Fragment(), LocationListener, InputListener {
 
-    private val placeViewModel: PlaceViewModel by viewModels(
-        ownerProducer = ::requireParentFragment
-    )
+    private val placeViewModel: PlaceViewModel by viewModels()
 
     private var listPlaces = emptyList<Place>()
 

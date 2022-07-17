@@ -11,12 +11,12 @@ import com.example.markersyandexmap.adapter.PlaceCallback
 import com.example.markersyandexmap.databinding.FragmentPlacesBinding
 import com.example.markersyandexmap.dto.Place
 import com.example.markersyandexmap.viewmodel.PlaceViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PlacesFragment : Fragment() {
 
-    val placeViewModel: PlaceViewModel by viewModels(
-        ownerProducer = ::requireParentFragment
-    )
+    val placeViewModel: PlaceViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
