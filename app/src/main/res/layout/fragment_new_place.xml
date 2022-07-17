@@ -58,7 +58,7 @@
             android:layout_margin="@dimen/common_spacing"
             android:layout_marginBottom="@dimen/common_spacing"
             android:backgroundTint="@color/my"
-            android:text="Save"
+            android:text="@string/save"
             android:textAllCaps="false"
             tools:ignore="ImageContrastCheck,MissingConstraints,SpeakableTextPresentCheck" />
     </LinearLayout>

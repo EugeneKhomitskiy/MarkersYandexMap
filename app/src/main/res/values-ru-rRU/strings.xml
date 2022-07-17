@@ -9,4 +9,5 @@
     <string name="description">Описание</string>
     <string name="permission_deny">У вас нет доступа к своему местоположению</string>
     <string name="empty_list">Список пуст</string>
+    <string name="save">Сохранить</string>
 </resources>
