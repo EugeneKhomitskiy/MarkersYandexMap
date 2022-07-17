@@ -2,6 +2,8 @@ package com.example.markersyandexmap.ui
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -12,6 +14,7 @@ import com.example.markersyandexmap.databinding.FragmentPlacesBinding
 import com.example.markersyandexmap.dto.Place
 import com.example.markersyandexmap.viewmodel.PlaceViewModel
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class PlacesFragment : Fragment() {
@@ -70,6 +73,7 @@ class PlacesFragment : Fragment() {
 
         placeViewModel.data.observe(viewLifecycleOwner) { places ->
             adapter.submitList(places)
+            binding.emptyText.isVisible = places.isEmpty()
         }
 
         placeViewModel.edited.observe(viewLifecycleOwner) { place ->

@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.markersyandexmap.R
+import com.example.markersyandexmap.databinding.FragmentMapBinding
 import com.example.markersyandexmap.dto.Place
 import com.example.markersyandexmap.viewmodel.PlaceViewModel
 import com.google.android.gms.location.LocationServices
@@ -37,6 +38,7 @@ class MapFragment : Fragment(), LocationListener, InputListener {
     private val placeViewModel: PlaceViewModel by viewModels()
 
     private var listPlaces = emptyList<Place>()
+    private var zoom = 16f
 
     private lateinit var mapView: MapView
     private lateinit var userLocationLayer: UserLocationLayer
@@ -64,21 +66,41 @@ class MapFragment : Fragment(), LocationListener, InputListener {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)
-            : View? {
-        val view = inflater.inflate(R.layout.fragment_map, container, false)
+            : View {
+        val binding = FragmentMapBinding.inflate(
+            layoutInflater,
+            container,
+            false
+        )
 
-        mapView = view.findViewById(R.id.map)
+        mapView = binding.map
         userLocationLayer = MapKitFactory.getInstance().createUserLocationLayer(mapView.mapWindow)
         locationManager = MapKitFactory.getInstance().createLocationManager()
         marksObject = mapView.map.mapObjects.addCollection()
         mapView.map.addInputListener(this)
 
-        view.findViewById<View>(R.id.user_location).setOnClickListener {
+        binding.userLocation.setOnClickListener {
             try {
                 moveCamera(userLocationLayer.cameraPosition()?.target!!)
             } catch (e: Exception) {
                 Toast.makeText(context, "Повторите попытку", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        binding.places.setOnClickListener {
+            findNavController().navigate(R.id.action_mapFragment_to_placesFragment)
+        }
+
+        binding.fabPlus.setOnClickListener {
+            zoom += 0.5f
+            val point = mapView.mapWindow.map.cameraPosition.target
+            mapView.map.move(CameraPosition(point, zoom, 0F, 0F))
+        }
+
+        binding.fabMinus.setOnClickListener {
+            zoom -= 0.5f
+            val point = mapView.mapWindow.map.cameraPosition.target
+            mapView.map.move(CameraPosition(point, zoom, 0F, 0F))
         }
 
         placeViewModel.data.observe(viewLifecycleOwner) {
@@ -94,7 +116,7 @@ class MapFragment : Fragment(), LocationListener, InputListener {
         checkPermission()
         moveCamera(position!!)
 
-        return view
+        return binding.root
     }
 
     private fun moveCamera(point: Point) {
@@ -136,11 +158,7 @@ class MapFragment : Fragment(), LocationListener, InputListener {
                     println(it)
                 }
             }
-            // 2. Должны показать обоснование необходимости прав
-            shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
-                // TODO: show rationale dialog
-            }
-            // 3. Запрашиваем права
+
             else -> {
                 requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
             }

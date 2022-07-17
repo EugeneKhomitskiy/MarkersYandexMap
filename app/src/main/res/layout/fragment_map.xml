@@ -7,12 +7,47 @@
     android:layout_height="match_parent"
     tools:context=".ui.MapFragment">
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/places"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        app:cornerRadius="8dp"
+        android:backgroundTint="@color/my"
+        android:layout_margin="16dp"
+        android:text="Маркеры" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabPlus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|end"
+        android:layout_marginBottom="72dp"
+        android:layout_marginEnd="@dimen/common_spacing"
+        android:backgroundTint="@color/my"
+        app:rippleColor="@color/my"
+        android:src="@drawable/ic_baseline_add_24" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabMinus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|end"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="@dimen/common_spacing"
+        android:backgroundTint="@color/my"
+        android:clickable="true"
+        android:src="@drawable/ic_baseline_horizontal_rule_24" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/user_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="@dimen/common_spacing"
         android:layout_marginBottom="48dp"
+        android:backgroundTint="@color/my"
         android:clickable="true"
         android:focusable="true"
         android:layout_gravity="bottom|end"
@@ -22,7 +57,5 @@
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

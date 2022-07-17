@@ -36,12 +36,12 @@ class NewPlaceFragment: Fragment() {
             false
         )
 
-        binding.title.setText(arguments?.getString("title"))
-        binding.description.setText(arguments?.getString("description"))
+        binding.textTitle.setText(arguments?.getString("title"))
+        binding.textDescription.setText(arguments?.getString("description"))
 
         binding.ok.setOnClickListener {
-            placeViewModel.changeTitle(binding.title.text.toString())
-            placeViewModel.changeDescription(binding.description.text.toString())
+            placeViewModel.changeTitle(binding.title.editText?.text.toString())
+            placeViewModel.changeDescription(binding.description.editText?.text.toString())
             placeViewModel.save(
                 requireArguments().getDouble("latitude"),
                 requireArguments().getDouble("longitude")
