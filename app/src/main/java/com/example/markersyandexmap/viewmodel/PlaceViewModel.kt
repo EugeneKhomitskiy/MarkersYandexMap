@@ -3,6 +3,7 @@ package com.example.markersyandexmap.viewmodel
 import androidx.lifecycle.*
 import com.example.markersyandexmap.dto.Place
 import com.example.markersyandexmap.repository.PlaceRepository
+import com.yandex.mapkit.geometry.Point
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,6 +25,7 @@ class PlaceViewModel @Inject constructor(
     val data: LiveData<List<Place>> = repository.data.asLiveData(Dispatchers.Default)
     val edited = MutableLiveData(empty)
     val place = MutableLiveData<Place>()
+    val currentPosition = MutableLiveData<Point?>()
 
     fun save(latitude: Double, longitude: Double) = viewModelScope.launch {
         edited.value?.let {
@@ -67,5 +69,9 @@ class PlaceViewModel @Inject constructor(
 
     fun getPlace(latitude: Double, longitude: Double) = viewModelScope.launch {
         place.value = repository.getPlace(latitude, longitude)
+    }
+
+    fun savePosition(point: Point?) {
+        currentPosition.value = point
     }
 }

@@ -5,6 +5,7 @@ import android.view.*
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.markersyandexmap.R
@@ -13,13 +14,14 @@ import com.example.markersyandexmap.adapter.PlaceCallback
 import com.example.markersyandexmap.databinding.FragmentPlacesBinding
 import com.example.markersyandexmap.dto.Place
 import com.example.markersyandexmap.viewmodel.PlaceViewModel
+import com.yandex.mapkit.geometry.Point
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
 class PlacesFragment : Fragment() {
 
-    val placeViewModel: PlaceViewModel by viewModels()
+    val placeViewModel: PlaceViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,11 +37,11 @@ class PlacesFragment : Fragment() {
         val adapter = PlaceAdapter(object : PlaceCallback {
 
             override fun onEdit(place: Place) {
-                placeViewModel.edit(place)
                 val bundle = Bundle().apply {
                     putString("title", place.title)
                     putString("description", place.description)
                 }
+                placeViewModel.edit(place)
                 findNavController().navigate(
                     R.id.action_placesFragment_to_newPlaceFragment,
                     bundle
@@ -51,11 +53,8 @@ class PlacesFragment : Fragment() {
             }
 
             override fun openMap(place: Place) {
-                val bundle = Bundle().apply {
-                    putDouble("lat", place.latitude)
-                    putDouble("lng", place.longitude)
-                }
-                findNavController().navigate(R.id.action_placesFragment_to_mapFragment, bundle)
+                placeViewModel.savePosition(Point(place.latitude, place.longitude))
+                findNavController().navigate(R.id.action_placesFragment_to_mapFragment)
             }
         })
         binding.list.adapter = adapter

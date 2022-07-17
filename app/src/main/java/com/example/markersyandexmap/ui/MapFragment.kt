@@ -76,11 +76,8 @@ class MapFragment : Fragment(), InputListener {
         mapView.map.addInputListener(this)
 
         binding.userLocation.setOnClickListener {
-            try {
-                moveCamera(userLocationLayer.cameraPosition()?.target!!)
-            } catch (e: Exception) {
-                Toast.makeText(context, "Повторите попытку", Toast.LENGTH_SHORT).show()
-            }
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            checkPermission()
         }
 
         binding.places.setOnClickListener {
@@ -116,14 +113,14 @@ class MapFragment : Fragment(), InputListener {
             }
         }
 
-        position = Point(
-            arguments?.getDouble("lat") ?: 55.75222,
-            arguments?.getDouble("lng") ?: 37.61556
-        )
+        placeViewModel.currentPosition.observe(viewLifecycleOwner) {
+            if (it != null) {
+                position = it
+            }
+        }
 
         marksObject.addTapListener(listener)
         checkPermission()
-        moveCamera(position!!)
 
         return binding.root
     }
@@ -142,25 +139,28 @@ class MapFragment : Fragment(), InputListener {
     }
 
     private fun checkPermission() {
-        when {
-            // 1. Проверяем есть ли уже права
+        when (PackageManager.PERMISSION_GRANTED) {
             ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED -> {
+            ) -> {
                 mapView.apply {
                     userLocationLayer.isVisible = true
-                    userLocationLayer.isHeadingEnabled = false
+                    userLocationLayer.isHeadingEnabled = true
                 }
 
                 val fusedLocationProviderClient = LocationServices
                     .getFusedLocationProviderClient(requireActivity())
 
                 fusedLocationProviderClient.lastLocation.addOnSuccessListener {
-                    println(it)
+                    if (position == null) {
+                        moveCamera(Point(it.latitude, it.longitude))
+                    } else {
+                        moveCamera(position!!)
+                        position = null
+                    }
                 }
             }
-
             else -> {
                 requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
             }
@@ -177,6 +177,8 @@ class MapFragment : Fragment(), InputListener {
         super.onStop()
         mapView.onStop()
         MapKitFactory.getInstance().onStop()
+        placeViewModel.savePosition(mapView.mapWindow.map.cameraPosition.target)
+        position = null
     }
 
     override fun onMapTap(map: Map, point: Point) {
