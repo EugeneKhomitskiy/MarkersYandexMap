@@ -33,12 +33,9 @@ import com.yandex.runtime.ui_view.ViewProvider
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MapFragment : Fragment(), LocationListener, InputListener {
+class MapFragment : Fragment(), InputListener {
 
     private val placeViewModel: PlaceViewModel by viewModels()
-
-    private var listPlaces = emptyList<Place>()
-    private var zoom = 16f
 
     private lateinit var mapView: MapView
     private lateinit var userLocationLayer: UserLocationLayer
@@ -46,6 +43,7 @@ class MapFragment : Fragment(), LocationListener, InputListener {
     private lateinit var locationManager: LocationManager
 
     private var position: Point? = null
+    private var zoom = 16f
 
     @SuppressLint("MissingPermission")
     private val requestPermissionLauncher =
@@ -104,8 +102,20 @@ class MapFragment : Fragment(), LocationListener, InputListener {
         }
 
         placeViewModel.data.observe(viewLifecycleOwner) {
-            listPlaces = it
-            addMakers()
+            val marker = View(context).apply {
+                background =
+                    AppCompatResources.getDrawable(
+                        context,
+                        R.drawable.ic_baseline_place_24
+                    )
+            }
+            for (i in it) {
+                marksObject
+                    .addPlacemark(
+                        Point(i.latitude, i.longitude),
+                        ViewProvider(marker)
+                    )
+            }
         }
 
         position = Point(
@@ -121,22 +131,6 @@ class MapFragment : Fragment(), LocationListener, InputListener {
 
     private fun moveCamera(point: Point) {
         mapView.map.move(CameraPosition(point, 16F, 0F, 0F))
-    }
-
-    private fun addMakers(){
-        for (i in listPlaces) {
-            addMarker(Point(i.latitude, i.longitude))
-        }
-    }
-
-    private fun addMarker(point: Point) {
-        val marker = View(context).apply {
-            background = AppCompatResources.getDrawable(context, R.drawable.ic_baseline_place_24)
-        }
-        mapView.map.mapObjects.addPlacemark(
-            point,
-            ViewProvider(marker)
-        )
     }
 
     private fun checkPermission() {
@@ -189,8 +183,4 @@ class MapFragment : Fragment(), LocationListener, InputListener {
         placeViewModel.edit(Place.empty)
         findNavController().navigate(R.id.action_mapFragment_to_newPlaceFragment, bundle)
     }
-
-    override fun onLocationUpdated(p0: Location) {}
-
-    override fun onLocationStatusUpdated(p0: LocationStatus) {}
 }
